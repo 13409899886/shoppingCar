@@ -1,0 +1,38 @@
+[
+	{
+		"title":"服装",
+		"list":[
+			{
+				"name":"男装",
+				"hot":true
+			},
+			{
+				"name":"女装",
+				"hot":false
+			},
+			{
+				"name":"童装",
+				"hot":true
+			}
+			
+		]
+	},
+	{
+		"title":"鞋类",
+		"list":[
+			{
+				"name":"男鞋",
+				"hot":true
+			},
+			{
+				"name":"女鞋",
+				"hot":false
+			},
+			{
+				"name":"童鞋",
+				"hot":false
+			}
+		]
+	}
+	
+]
