@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-height: 100%;">
   	<div class="weui-panel weui-panel_access">
         <div class="weui-panel__bd">
             <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
@@ -38,5 +38,5 @@ export default {
 
 <style scoped>
 	.date{font-size: 12px; color: #999;}
-	.weui-media-box__hd{background: url(../../../static/images/banner.png) no-repeat center center; background-size: cover;}
+	.weui-media-box__hd{background: url(../../../static/images/newsLogo.png) no-repeat center center; background-size: cover;}
 </style>

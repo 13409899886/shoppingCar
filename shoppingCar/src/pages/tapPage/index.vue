@@ -94,7 +94,6 @@
 
 <script>
 import mySlider from "../../components/slider.vue"
-
 export default {
   data(){
 		return{
@@ -106,12 +105,11 @@ export default {
 	},
 	mounted(){
 		//获取轮播参数
-	  this.$http.get('../../../static/sliderList.json').then(response => {
-      	
-      	this.slideList=response.body
-      	console.log(this.slideList);//成功回调
-	  }, response => {
-	      console.log("response"); //成功回调
+	  this.$http.get(this.Api+'Banner/index').then(response => {
+      	if(response.body.error==0){
+      		this.slideList=response.body.data
+      	}
+      
 	  });
 	}
 }
@@ -127,6 +125,6 @@ export default {
 	/*.weui-panel_access{padding-bottom: 80px;}*/
 	.price{color: #fbb33f; margin-left: 10px;}
 	.price .weui-btn{vertical-align: middle; background-color:#fbb33f; margin-right: 10px;}
-	.weui-media-box__hd{border-radius: 50%; overflow: hidden;background: url(../../../static/images/banner.png) no-repeat center center; background-size: cover;}
+	.weui-media-box__hd{border-radius: 50%; overflow: hidden;background: url(../../../static/images/newsLogo.png) no-repeat center center; background-size: cover;}
 	.weui-cell__hd{width: 90px; height: 20px; background: url(../../../static/images/newsLogo.png) no-repeat center center; background-size: cover; margin-right: 10px;}
 </style>

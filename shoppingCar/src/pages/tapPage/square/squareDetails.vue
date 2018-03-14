@@ -14,7 +14,7 @@
     <div class="weui-panel weui-panel_access comment">
         <div class="weui-panel__bd">
             <div class="weui-media-box weui-media-box_appmsg">
-                <div class="weui-media-box__hd"></div>
+                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div>
                 <div class="weui-media-box__bd">
                     <h4 class="weui-media-box__title">张三 </h4>
                    

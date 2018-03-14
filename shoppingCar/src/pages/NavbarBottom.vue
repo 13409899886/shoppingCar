@@ -1,8 +1,8 @@
 <template>
-  <div>
-  	<keep-alive>
-  	<router-view></router-view>
-  	</keep-alive>
+  <div style="height: 100%;">
+  		
+  			<router-view ></router-view>
+  	
     <div class="weui-tabbar">
         <router-link :to="{path:item.LinkTo}" v-for="(item,index) in barList" href="javascript:;"  class="weui-tabbar__item" :class="{'weui-bar__item_on':nowIndex==index}" tag="a" :key="index">
             <span style="display: inline-block;position: relative;" @click="fabu(index)">
@@ -13,16 +13,18 @@
         </router-link>
     </div>
     <my-dialog :isshow="isshow" @close="onclose">
-    	<div class="flex flex-pack-center">
-    		<router-link :to="{path:'/fabuTast'}" tag="div" class="task flex flex-v flex-align-center">
-    			<div class="round" ></div>
-    			发布任务
-    		</router-link>
-    		<router-link :to="{path:'/fabuSkill'}" tag="div" class="skill flex flex-v flex-align-center">
-    			<div class="round"></div>
-    			发布技能
-    		</router-link>
-    	</div>
+    	
+	    	<div  class="flex flex-pack-center">
+	    		<router-link :to="{path:'/fabuTast/task/no'}" tag="div" class="task flex flex-v flex-align-center">
+	    			<div class="round" ></div>
+	    			发布任务
+	    		</router-link>
+	    		<router-link :to="{path:'/fabuTast/skill/no'}" tag="div" class="skill flex flex-v flex-align-center">
+	    			<div class="round"></div>
+	    			发布技能
+	    		</router-link>
+	    	</div>
+	    
     </my-dialog>
   </div>
 </template>
@@ -37,12 +39,12 @@ export default {
 			barList:[
 				{
 					Url:"../../static/images/home",
-					LinkTo:"/index/index1",
+					LinkTo:"/index/0",
 					Text:"首页"
 				},
 				{
 					Url:"../../static/images/square",
-					LinkTo:"/index/square",
+					LinkTo:"/square/1",
 					Text:"广场"
 				},
 				{
@@ -52,24 +54,35 @@ export default {
 				},
 				{
 					Url:"../../static/images/news",
-					LinkTo:"/index/message",
+					LinkTo:"/message/3",
 					Text:"消息"
 				},
 				{
 					Url:"../../static/images/me",
-					LinkTo:"/index/my",
+					LinkTo:"/my/4",
 					Text:"我的"
 				}
 			]
 		}
   },
+  watch:{
+  	"$route":"jianting"
+  },
   mounted(){
-  		this.$router.push("/index/index1")
+		
+  },
+  created(){
+  	this.jianting()
+  	
   },
   components:{
   	myDialog
   },
   methods:{
+  	jianting(){
+//			console.log(this.$route.params.now)
+  			this.nowIndex=Number(this.$route.params.now);
+  		},
   	onclose(){
   		this.isshow=false
   	},
@@ -78,7 +91,7 @@ export default {
   				this.isshow=true
   		}else{
   			this.nowIndex=index;
-  			console.log(this.nowIndex)
+			console.log(this.nowIndex)
   		}
   	}
   }
@@ -93,4 +106,5 @@ export default {
 		.task .round{background-image:url(../../static/images/task.png)}
 		.skill .round{background-image:url(../../static/images/skill.png)}
 		.round{width: 70px; height:70px; border-radius: 50%; background-position: center center; background-repeat:no-repeat; background-size:cover; background-color:#fff ;}
+		
 </style>

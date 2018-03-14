@@ -1,9 +1,9 @@
 <template>
-  <div >
+  <div style="min-height: 100%;">
   	
 	  <div class="weui-cells weui-cells_form">
 		  	<div class="flex flex-pack-justify" style="padding: 10px 15px;">
-		  		<span>取消</span>
+		  		<span @click="$router.go(-1)">取消</span>
 		  		<span>发表</span>
 		  	</div>
         <div class="weui-cell">

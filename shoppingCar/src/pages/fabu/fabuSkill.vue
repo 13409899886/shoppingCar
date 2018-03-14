@@ -1,18 +1,12 @@
 <template>
-  <div class="c-p-form">
+  <div class="c-p-form" style="min-height: 100%;">
   			<div class="weui-cells weui-cells_form">
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd">
-                    <label for="" class="weui-label">技能类别：</label>
+            <router-link :to="{path:'/fabuClassify'}" class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>文字标题</p>
                 </div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="select2">
-                        <option value="1">1321</option>
-                        <option value="2">美国</option>
-                        <option value="3">英国</option>
-                    </select>
-                </div>
-            </div>
+                <span class="weui-cell__ft"></span>
+            </router-link>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">技能酬劳：</label></div>
                 <div class="weui-cell__bd">
@@ -77,7 +71,7 @@
             </div>
         </div>
         <div class="weui-btn-area">
-			 <a href="javascript:;" class="weui-btn weui-btn_primary" >确认创建</a>
+			 <a href="javascript:;" class="weui-btn weui-btn_primary" >确认发布</a>
 			</div>
 	</div>
 </template>

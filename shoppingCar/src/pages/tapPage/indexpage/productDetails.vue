@@ -18,7 +18,7 @@
         <div class="weui-panel weui-panel_access">
 	        <div class="weui-panel__bd">
 	            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg kecheng">
-	                <div class="weui-media-box__hd"></div>
+	                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
 	                <div class="weui-media-box__bd">
 	                    <h4 class="weui-media-box__title">吉他课程<span>35人购买</span></h4>
 	                    <p class="weui-media-box__desc">￥300</p>
@@ -33,22 +33,39 @@
             <div class="weui-panel__hd">全部评价</div>
             <div class="weui-panel__bd">
                 <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                    <div class="weui-media-box__hd"></div>
+                    <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
                     <div class="weui-media-box__bd">
                         <h4 class="weui-media-box__title">张三 <span>2013.0.1</span></h4>
                         <p class="weui-media-box__desc">
                         	<img src="../../../../static/images/star-all.png"/><img src="../../../../static/images/star-line.png"/>
                         </p>
                         <div class="weui-media-box__desc">老师很好，很好学。
-                        	<div class="weui-media-box__hd"></div>
+                        	<div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
                         </div>
                     </div>
                 </a>
                 <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                    <div class="weui-media-box__hd"></div>
+                    <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
                     <div class="weui-media-box__bd">
-                        <h4 class="weui-media-box__title">标题二</h4>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                        <h4 class="weui-media-box__title">张三 <span>2013.0.1</span></h4>
+                        <p class="weui-media-box__desc">
+                        	<img src="../../../../static/images/star-all.png"/><img src="../../../../static/images/star-line.png"/>
+                        </p>
+                        <div class="weui-media-box__desc">老师很好，很好学。
+                        	<div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
+                        </div>
+                    </div>
+                </a>
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">张三 <span>2013.0.1</span></h4>
+                        <p class="weui-media-box__desc">
+                        	<img src="../../../../static/images/star-all.png"/><img src="../../../../static/images/star-line.png"/>
+                        </p>
+                        <div class="weui-media-box__desc">老师很好，很好学。
+                        	<div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
+                        </div>
                     </div>
                 </a>
             </div>
@@ -63,7 +80,7 @@
             <div class="weui-panel__hd">更多商家</div>
             <div class="weui-panel__bd">
                 <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                    <div class="weui-media-box__hd"></div>
+                    <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
                     <div class="weui-media-box__bd">
                         <h4 class="weui-media-box__title">滚石影月 <span>35人购买</span></h4>
                         <p class="weui-media-box__desc">￥500</p>

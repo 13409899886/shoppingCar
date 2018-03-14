@@ -1,9 +1,9 @@
 <template>
   <div class="slideBox" @mousemove="clearInterval" @mouseout="auto">
   	
-    	<div class="slidePic" v-if="sliders!=0" :style="'background-image:url(../../static/images/'+sliders[nowIndex].Url+')'"></div>
+    	<div class="slidePic" v-if="sliders!=0" :style="'background-image:url('+sliders[nowIndex].smeta+')'"></div>
     
-    <h3 v-if="sliders!=0">{{sliders[nowIndex].title}}</h3>
+    <h3 v-if="sliders!=0" v-html="sliders[nowIndex].contents"></h3>
     <ul class="slidePages" >
     	<li @click="goto(pre)">&lt;</li>
     	<li v-for="(item , index) in sliders" @click="goto(index)" :class="{on:index==nowIndex}">{{index+1}}</li>

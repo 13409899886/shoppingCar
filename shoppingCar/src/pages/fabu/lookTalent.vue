@@ -1,0 +1,84 @@
+<template>
+  <div style="padding-bottom: 80px;">
+  	<div class="weui-panel weui-panel_access comment">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">我想学吉他 <span>2013.0.1</span></h4>
+                    
+                    <div class="weui-media-box__desc">老师很好，很好学。</div>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+    <div class="weui-panel weui-panel_access comment">
+        <div class="weui-panel__hd">达人推荐</div>
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" >
+                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">张三 <span>￥50</span></h4>
+                    <p class="weui-media-box__desc">
+                    	<img src="../../../static/images/star-all.png"/><img src="../../../static/images/star-line.png"/>
+                    </p>
+                    <h4 class="weui-media-box__title">我擅长吉他入门指法</h4>
+                </div>
+            </a>
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">张三 <span>￥80</span></h4>
+                    <p class="weui-media-box__desc">
+                    	<img src="../../../static/images/star-all.png"/><img src="../../../static/images/star-line.png"/>
+                    </p>
+                    <h4 class="weui-media-box__title">我擅长吉他入门指法</h4>
+                </div>
+            </a>
+        </div>
+    </div>
+		
+  </div>
+  
+</template>
+
+<script>
+
+export default {
+  data(){
+		return{
+		}
+  },
+  components:{
+	},
+	mounted(){
+		
+	}
+}
+</script>
+
+<style scoped>
+	.banner{display: block;}
+	.pay{position: fixed;left: 0; right: 0; bottom: 0; text-align: right;padding: 10px; background: #fff; color: #fca120; box-shadow: 0 0 5px #f0f0f0;}
+	.pay .weui-btn {vertical-align:middle; margin-left: 15px; background-color: #fca120;}
+	.weui-media-box__hd{
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-color: #f0f0f0;
+    
+		}
+		.comment .weui-media-box_appmsg{
+			-webkit-box-align: start; 
+    -webkit-align-items: start; 
+     align-items: start; 
+		}
+		.weui-media-box__info__meta img,.weui-media-box__desc img{height: 12px;}
+		.weui-media-box__title >span{font-size: 14px; color: #999; float:right}
+		.kecheng .weui-media-box__desc {color: #fca120;}
+		.weui-media-box__bd >:nth-child(2) {margin-bottom: 15px;}
+		.weui-media-box__desc .weui-media-box__hd{margin-top: 15px; height: 80px; width: 80px;}
+		.comment .weui-media-box >.weui-media-box__hd{border-radius: 50%;}
+		.weui-media-box__title span{color: #fca120;}
+</style>
