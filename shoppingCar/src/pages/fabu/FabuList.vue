@@ -3,11 +3,10 @@
   	<span v-if="fabuList&&fabuList.length=='0'">没有数据</span>
   	<div class="weui-panel weui-panel_access" v-if="fabuList" v-for="item in fabuList">
         <div class="weui-panel__bd">
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                <div class="weui-media-box__hd" v-if="!item.smeta" style="background-image:url(../../../static/images/newsLogo.png)"></div>
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" @click="toDetail(item)">
                 <div class="weui-media-box__hd" :style="'background-image:url('+item.smeta+')'" v-if="item.smeta"></div>
                 <div class="weui-media-box__bd">
-                    <h4 class="weui-media-box__title">{{item.name}}</h4>
+                    <h4 class="weui-media-box__title">{{item.name}}123</h4>
                     <p class="weui-media-box__desc">￥{{item.salary}}</p>
                     <ul class="weui-media-box__info">
                         <li class="weui-media-box__info__meta">浏览：{{item.readnum}}</li>
@@ -18,11 +17,11 @@
             <div class="operation">
             	<router-link :to="{path:'/fabuTast/task/'+item.id}" v-if="type=='task'" class="weui-btn weui-btn_mini weui-btn_default">编辑</router-link>
             	<router-link :to="{path:'/fabuTast/skill/'+item.id}" v-if="type=='skill'" class="weui-btn weui-btn_mini weui-btn_default">编辑</router-link>
-            	<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_default">删除</a>
+            	<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_default" @click="delet(item)">删除</a>
             </div>
         </div>
     </div>
-    
+    <i class="weui-loading" v-show="lodding" style=""></i>
   </div>
 </template>
 
@@ -33,8 +32,11 @@ export default {
 		return{
 			fabuList:null,
 			type:"",
-			Url:"",
-			userid:""
+			Url:"",//编辑地址
+			userid:"",
+			delUrl:"",//删除地址
+			lodding:false,
+			typeId:null//区分技能和任务
 		}
   },
   mounted(){
@@ -42,16 +44,36 @@ export default {
   	this.type=this.$route.params.type
   	if(this.type=="task"){
   		this.Url="Mission/index"
+  		this.delUrl="Mission/delete"
+  		this.typeId=1
   	}else if(this.type="skill"){
   		this.Url="Skill/index"
+  		this.delUrl="skill/delete"
+  		this.typeId=2
   	}
-	this.$http.post(this.Api+this.Url,{userid:this.userid}).then(response => {//获取用户数据
+		this.$http.post(this.Api+this.Url,{userid:this.userid}).then(response => {//获取用户数据
       	console.log(response)
       	this.lodding=false
       	if(response.body.error==0){
       		this.fabuList=response.body.data
       	}
 	  });
+  },
+  methods:{
+  	toDetail(item){//查看详情
+			console.log(item)
+			this.$router.push('/detail/'+item.id+'/'+this.typeId)
+		},
+  	delet(item){
+  		this.lodding=true
+  		this.$http.post(this.Api+this.delUrl,{id:item.id}).then(response => {//获取用户数据
+      	console.log(response)
+      	this.lodding=false
+      	if(response.body.error==0){
+					this.fabuList.splice(this.fabuList.indexOf(item),1)
+      	}
+	  	});
+  	}
   }
 }
 </script>

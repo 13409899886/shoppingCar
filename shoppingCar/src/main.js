@@ -13,6 +13,7 @@ import Square from './pages/tapPage/square'
 import Message from './pages/tapPage/message'
 import My from './pages/tapPage/my'
 import Product from './pages/tapPage/indexpage/productDetails'
+import AllH from './pages/tapPage/indexpage/allList'
 import squareDetails from './pages/tapPage/square/squareDetails'
 import Fabiao from './pages/tapPage/square/fabiao'
 import Task from './pages/fabu/fabuTask'
@@ -20,18 +21,22 @@ import Skill from './pages/fabu/fabuSkill'
 import FabuList from './pages/fabu/fabuList'
 import FabuClassify from './pages/fabu/fabuClassify'
 import OrderList from './pages/order/orderList'
+import SkillList from './pages/order/skillList'
 import Login from './pages/login/login'
 import Money from './pages/money/money'
+import MyScore from './pages/money/myScore'
+import GiveScore from './pages/money/giveScore'
 import ShoucangList from './pages/shoucang/shoucangList'
+import FocusList from './pages/shoucang/focus'
 import ChangeBindTel from './pages/login/changeBindTel'
 import Telcode from './pages/login/telcode'
 import LookTalent from './pages/fabu/lookTalent'
 Vue.prototype.Api="http://192.168.31.233/fenghuaxiaoyuan/code/index.php?s=Api/"
-
+//Vue.prototype.Api="http://fhxy.helpxue.com/Api/index.php?s=Api/"
 Vue.http.options.emulateJSON = true;
 let router=new myRouter({
 	mode:"history",
-//	base:"/github/shoppingCar/shoppingCar/dist",
+//	base:"/wwwroot/fhxy.helpxue.com/",
 	routes:[
 		{
 			path:"/",
@@ -52,8 +57,12 @@ let router=new myRouter({
 			]
 		},
 		{
-			path:"/detail/:id",
+			path:"/detail/:id/:type",
 			component:Product
+		},
+		{
+			path:"/all/:type",
+			component:AllH
 		},
 		{
 			path:"/squareDetails/:id",
@@ -64,11 +73,11 @@ let router=new myRouter({
 			component:Fabiao
 		},
 		{
-			path:"/fabuTast/:type/:id",
+			path:"/fabuTast/:type/:id",//id文章id
 			component:Task
 		},
 		{
-			path:"/lookTalent",
+			path:"/lookTalent/:Type/:type",//Type区分发布的类型 type 返回的发布类型
 			component:LookTalent
 		},
 		{
@@ -104,8 +113,24 @@ let router=new myRouter({
 			component:OrderList
 		},
 		{
+			path:"/skillList",
+			component:SkillList
+		},
+		{
 			path:"/shoucangList",
 			component:ShoucangList
+		},
+		{
+			path:"/focusList/:type",//type区分是关注列表或朋友裂变
+			component:FocusList
+		},
+		{
+			path:"/myScore/:score",
+			component:MyScore
+		},
+		{
+			path:"/giveScore/:touserid/:goods_id/:goods_type",
+			component:GiveScore
 		}
 	]
 })

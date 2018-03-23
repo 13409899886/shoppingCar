@@ -3,7 +3,7 @@
   	
     	<div class="slidePic" v-if="sliders!=0" :style="'background-image:url('+sliders[nowIndex].smeta+')'"></div>
     
-    <h3 v-if="sliders!=0" v-html="sliders[nowIndex].contents"></h3>
+    <h3 v-if="sliders!=0" v-html="sliders[nowIndex].name"></h3>
     <ul class="slidePages" >
     	<li @click="goto(pre)">&lt;</li>
     	<li v-for="(item , index) in sliders" @click="goto(index)" :class="{on:index==nowIndex}">{{index+1}}</li>
@@ -37,6 +37,7 @@ export default {
 	},
 	mounted(){
 		this.auto()
+		console.log(this.sliders)
 	},
 	watch:{
 		sliders(){
@@ -66,6 +67,7 @@ export default {
 		goto(index){
 				this.show=true
 				this.nowIndex=index
+				
 		},
 		auto(){
 			 this.timer=setInterval(()=>{
@@ -95,7 +97,7 @@ export default {
 	li{float: left; margin-left: 5px; cursor:pointer;}
 	.slideBox{position: relative;width: 100%; height: 180px;overflow: hidden; margin-bottom: 15px;}
 	.slidePic{width: 100%; height: 100%; background-repeat: no-repeat; background-position: center center; background-size:cover;}
-	h3{position: absolute;left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.3); color: #fff;padding: 10px;}
+	h3{position: absolute;left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.3); color: #fff;padding: 10px; font-weight: normal;}
 	.slidePages{position: absolute;right: 15px; bottom: 0; color: #fff;}
 	li.on{text-decoration: underline;}
 </style>

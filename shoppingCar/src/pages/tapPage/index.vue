@@ -3,92 +3,102 @@
   		<my-slider :sliders="slideList"></my-slider>
   		<div class="weui-cells__title">发布任务</div>
   		<div class="weui-grids">
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/task/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">我</div>
             <p class="weui-grid__label">学习辅导</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/task/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">要</div>
             <p class="weui-grid__label">高人答疑</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/task/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">发</div>
             <p class="weui-grid__label">生活服务</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/task/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">任</div>
             <p class="weui-grid__label">休闲娱乐</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/task/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">务</div>
             <p class="weui-grid__label">跑腿</p>
         </router-link>
     	</div>
   		<div class="weui-cells__title">技能市场</div>
   		<div class="weui-grids">
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/skill/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">我</div>
             <p class="weui-grid__label">学习辅导</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/skill/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">要</div>
             <p class="weui-grid__label">运动娱乐</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/skill/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">找</div>
             <p class="weui-grid__label">生活技能</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/skill/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">达</div>
             <p class="weui-grid__label">私人订制</p>
         </router-link>
-        <router-link :to="{path:'/'}" tag="a" class="weui-grid">
+        <router-link :to="{path:'/fabuTast/skill/no'}" tag="a" class="weui-grid">
             <div class="weui-grid__icon">人</div>
             <p class="weui-grid__label">兴趣特长</p>
         </router-link>
     	</div>
-    	<div class="weui-panel">
+    	<div class="weui-panel" v-if="indexData">
             <div class="weui-panel__bd">
                 <div class="weui-media-box weui-media-box_small-appmsg">
                     <div class="weui-cells">
                         <a class="weui-cell weui-cell_access" href="javascript:;">
                             <div class="weui-cell__hd"></div>
                             <div class="weui-cell__bd weui-cell_primary">
-                                <p>文字标题</p>
+                                <p>{{indexData.news.title}}</p>
                             </div>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+      <div v-if="indexData">
         <div class="weui-panel weui-panel_access">
-        	<div class="weui-panel__hd">推荐技能</div>
+        	<div class="weui-panel__hd">推荐任务<span class="more" @click="$router.push('/all/task')">更多</span></div>
             <div class="weui-panel__bd">
-                <router-link :to="{path:'/detail/1'}" tag="a" class="weui-media-box weui-media-box_appmsg">
-                    <div class="weui-media-box__hd">
-                    </div>
+            	<template v-for="item in indexData.mission_list">
+                <router-link :to="{path:'/detail/'+item.id+'/1'}" tag="a" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd" :style="'background-image: url('+item.smeta+');'"></div>
                     <div class="weui-media-box__bd">
-                        <h4 class="weui-media-box__title">标题一</h4>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                        <h4 class="weui-media-box__title">#我要学#{{item.name}}</h4>
+                        <p class="weui-media-box__desc">{{item.connect}}</p>
                     </div>
                     <div class="price">
-                    		<span class="weui-btn weui-btn_mini weui-btn_primary">一口价</span>50元
+                    		<!--<span class="weui-btn weui-btn_mini weui-btn_primary">一口价</span>-->{{item.salary}}元
                     </div>
                 </router-link>
-                <router-link :to="{path:'/detail/2'}" tag="a" class="weui-media-box weui-media-box_appmsg">
-                    <div class="weui-media-box__hd">
-                    </div>
-                    <div class="weui-media-box__bd">
-                        <h4 class="weui-media-box__title">标题一</h4>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                    </div>
-                    <div class="price">
-                    		<span class="weui-btn weui-btn_mini weui-btn_primary">一口价</span>500元
-                    </div>
-                </router-link>
+              </template>  
             </div>
         </div>
-        
+        <div class="weui-panel weui-panel_access">
+        	<div class="weui-panel__hd">推荐技能 <span class="more" @click="$router.push('/all/skill')">更多</span></div>
+            <div class="weui-panel__bd">
+                <template v-for="item in indexData.skill_list">
+                <router-link :to="{path:'/detail/'+item.id+'/2'}" tag="a" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd" :style="'background-image: url('+item.smeta+');'">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">#我来教#{{item.name}}</h4>
+                        <p class="weui-media-box__desc">{{item.connect}}</p>
+                    </div>
+                    <div class="price">
+                    		<!--<span class="weui-btn weui-btn_mini weui-btn_primary">一口价</span>-->{{item.salary}}元
+                    </div>
+                </router-link>
+              </template>  
+            </div>
+        </div>
+      </div>
+      <i class="weui-loading" v-show="lodding" style=""></i>
   </div>
 </template>
 
@@ -97,19 +107,32 @@ import mySlider from "../../components/slider.vue"
 export default {
   data(){
 		return{
-			slideList:[]
+			lodding:false,
+			slideList:[],
+			indexData:null
 		}
   },
   components:{
 		mySlider
 	},
 	mounted(){
+		this.lodding=true
 		//获取轮播参数
 	  this.$http.get(this.Api+'Banner/index').then(response => {
       	if(response.body.error==0){
       		this.slideList=response.body.data
+					
       	}
       
+	  });
+		//	  获取首页内容
+	  this.$http.get(this.Api+"Shouye/index").then(response => {//获取用户数据
+
+      	if(response.body.error==0){
+      		this.indexData=response.body
+      		console.log(this.indexData)
+      		this.lodding=false
+      	}
 	  });
 	}
 }
@@ -127,4 +150,7 @@ export default {
 	.price .weui-btn{vertical-align: middle; background-color:#fbb33f; margin-right: 10px;}
 	.weui-media-box__hd{border-radius: 50%; overflow: hidden;background: url(../../../static/images/newsLogo.png) no-repeat center center; background-size: cover;}
 	.weui-cell__hd{width: 90px; height: 20px; background: url(../../../static/images/newsLogo.png) no-repeat center center; background-size: cover; margin-right: 10px;}
+	.weui-panel:after, .weui-panel:before{display: none;}
+	.weui-panel:first-child{margin-top:10px}
+	.more {float: right; color: #ffa515;}
 </style>

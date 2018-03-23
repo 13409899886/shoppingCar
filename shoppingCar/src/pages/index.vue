@@ -1,6 +1,8 @@
 <template>
  <div style="height: 100%;">
+ 	<keep-alive>
  	 <myNavbar></myNavbar>
+ 	</keep-alive>
  </div>
 
 </template>

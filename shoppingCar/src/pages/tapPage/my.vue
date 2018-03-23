@@ -11,12 +11,12 @@
 	  		<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_default">学生认证</a>
 				<ul class="amount1 amount">
 					<li>粉丝：{{userInfo.amountFans}}</li>
-					<li><img src="../../../static/images/icon-wallet.png"/>{{userInfo.amountMoney==null&&0}}</li>
+					<li><img src="../../../static/images/icon-wallet.png"/>{{userInfo.amountMoney}}</li>
 				</ul>
 	  		<ul class="amount2 amount">
-					<li>{{userInfo.amountFocus}} <br />关注</li>
-					<li>{{userInfo.amountFriend}}<br />朋友</li>
-					<li>{{userInfo.amountComment==null&&0}}<br />评价</li>
+					<li @click="$router.push('/focusList/focu')">{{userInfo.amountFocus}} <br />关注</li>
+					<li @click="$router.push('/focusList/friend')">{{userInfo.amountFriend}}<br />朋友</li>
+					<li @click="$router.push('/MyScore/'+userInfo.amountComment)">{{userInfo.amountComment}}<br />评分</li>
 				</ul>
 	  	</div>
 	  	<div class="weui-cells weui-panel" v-if=false>
@@ -65,7 +65,7 @@
             <div class="weui-cell__bd">
                 <p>我的钱包</p>
             </div>
-            <div class="weui-cell__ft">余额 : {{userInfo.amountMoney==null&&0}}</div>
+            <div class="weui-cell__ft">余额 : {{userInfo.amountMoney}}</div>
         </router-link>
         <a class="weui-cell weui-cell_access js_item" data-id="list" href="javascript:;" v-if=false>
             <div class="weui-cell__bd">
@@ -74,9 +74,15 @@
             <div class="weui-cell__ft">积分 : {{userInfo.amountFocus}}</div>
         </a>
        
+        <router-link :to="{path:'/skillList'}" class="weui-cell weui-cell_access js_item" data-id="uploader" >
+            <div class="weui-cell__bd">
+                <p>我卖出的</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </router-link>
         <router-link :to="{path:'/orderList'}" class="weui-cell weui-cell_access js_item" data-id="uploader" >
             <div class="weui-cell__bd">
-                <p>我的订单</p>
+                <p>我买到的</p>
             </div>
             <div class="weui-cell__ft"></div>
         </router-link>

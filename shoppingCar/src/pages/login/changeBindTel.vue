@@ -6,13 +6,14 @@
 				<div class="weui-cells weui-cells_form">
             <div class="weui-cell" >
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="tel" v-focus="'空'"  placeholder="请输入手机号" value="">
+                    <input class="weui-input" type="tel" v-focus="'空'"  placeholder="请输入手机号" v-model.number="telNumber">
                 </div>
+                <i class="weui-icon-cancel" v-show="isError"></i>
             </div>
        	</div>
 			</div>
 			<div class="weui-btn-area">
-				<router-link :to="{path:'/telcode'}" class="weui-btn weui-btn_primary" >获取短信验证码</router-link >
+				<div @click="getCode" class="weui-btn weui-btn_primary" >获取短信验证码</div>
 			</div>
 		</form>
 		
@@ -25,6 +26,9 @@
 export default {
   data(){
 		return{
+			telNumber:"",
+			isError:false,
+			statu:null
 		}
   },
   components:{
@@ -38,6 +42,41 @@ export default {
  },
 	mounted(){
 		
+	},
+	watch:{
+		telNumber(oldData,newData){  
+			console.log(oldData+":"+newData)
+//			if(/^\d{11}$/.test(this.telNumber)){
+//				this.isError=false
+//			}else{
+//				this.isError=true
+//			}
+			this.statu=1
+			if(  /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(this.telNumber)){
+				this.isError=false
+			}else{
+				this.isError=true
+			}
+		}
+	},
+	methods:{
+		getCode(){
+			if(!this.statu){
+				alert("请输入正确的手机号码")
+				return;
+			}
+			if(this.isError){
+				alert("请输入正确的手机号码")
+			}else{
+					  this.$http.post(this.Api+'Login/yzcode',{tel:this.telNumber}).then(response => {
+				      	if(response.body.error==0){
+				      		localStorage.setItem("tel",this.telNumber)
+				      		this.$router.push("/telcode")
+				      	}
+					  });
+					
+			}
+		}
 	}
 }
 </script>

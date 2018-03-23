@@ -106,10 +106,13 @@ export default {
 			this.lodding=true
 		  this.$http.post(this.Api+'Login/Login',{tel:this.telNumber,yzm:this.yzm}).then(response => {
 	      	this.lodding=false
+	      	console.log(response.body)
 	      	if(response.body.error==0){
 	      		localStorage.setItem("userId",response.body.data)//登陆成功存储用户id
 	      		this.$router.go(-1)
 	      		
+	      	}else{
+	      		alert(response.body.msg)
 	      	}
 		  });
 		}

@@ -39,7 +39,7 @@
 			            </div>
 			            <div class="weui-uploader__bd">
 			                <ul class="weui-uploader__files" id="uploaderFiles">
-			                    <li class="weui-uploader__file " v-if="data.smeat" :style="'background-image:url('+data.smeat+')'">
+			                    <li class="weui-uploader__file " v-if="data.smeta" :style="'background-image:url('+data.smeta+')'">
 			                    </li>
 			                </ul>
 			                <div class="weui-uploader__input-box">
@@ -71,6 +71,7 @@
                     </label>
                 </div>
             </div>
+           
         </div>
         <div class="weui-btn-area">
 			 <a href="javascript:;" class="weui-btn weui-btn_primary" @click="submitBtn()">确认发布</a>
@@ -91,17 +92,18 @@ export default {
 			Id:null,//用户id
 			topMenu:"",
 			secondMenu:"",
+			Url:"",
 			data:{
 				type:null,
 				userid:null,
 				salary:null,
 				type_id:null,
 				contents:null,
-				smeat:null,
+				smeta:null,
 				connect:null,
 				tel:null,
 				name:null,
-				is_hidename:null
+				is_hidename:false,
 			}
 		}
   },
@@ -118,12 +120,8 @@ export default {
   	
   	//如果是task类型就是任务 skill就是技能  如果id不等于no就是编辑 否则发布
   	if(this.Type=="task"){
+  		this.Url="Mission/add_mission" //确定提交接口地址
   		//获取选中类型
-//		if(localStorage.getItem("taskbackMenu")){
-//			var data=JSON.parse(localStorage.getItem("taskbackMenu"))
-//				this.topMenu=data[0].name
-//				this.secondMenu=data[1].name
-//			}
   		if(this.Id!="no"){//编辑任务
   			this.lodding=true
   			this.$http.post(this.Api+'Mission/mission_xq',{id:this.Id}).then(response => {//获取用户数据
@@ -131,31 +129,45 @@ export default {
 		      	this.lodding=false
 		      	if(response.body.error==0){
 		      		this.secondMenu=response.body.data[0].type_name
-		      		this.data.userid=this.Id;
+		      		
 		      		this.data.salary=response.body.data[0].salary
 		      		this.data.type_id=response.body.data[0].type_id
 		      		this.data.type=response.body.data[0].type
 		      		this.data.contents=response.body.data[0].contents
-		      		this.data.smeat=response.body.data[0].smeat
+		      		this.data.smeta=response.body.data[0].smeta
 		      		this.data.connect=response.body.data[0].connect
 		      		this.data.tel=response.body.data[0].tel
-		      		this.data.is_hidename=response.body.data[0].is_hidename
+		      		if(response.body.data[0].is_hidename=="true"){this.data.is_hidename=true}else{this.data.is_hidename=false}
+		      		console.log(response.body.data[0].is_hidename+"/"+this.data.is_hidename)
 		      		this.data.name=response.body.data[0].name
+		      		this.data.id=this.$route.params.id
 		      	}
 			  });
   		}else{//发布任务
   			
   		}
   	}else if(this.Type=="skill"){
-//		//获取选中类型
-//		if(localStorage.getItem("skillbackMenu")){
-//			var data=JSON.parse(localStorage.getItem("skillbackMenu"))
-//				this.topMenu=data[0].name
-//				this.secondMenu=data[1].name
-//			}
-  		console.log(this.secondMenu)
+  		this.Url="Skill/add_skill" //确定提交接口地址
   		if(this.Id!="no"){//编辑技能
-  			
+  			this.lodding=true
+  			this.$http.post(this.Api+'Skill/skill_xq',{id:this.Id}).then(response => {//获取用户数据
+		      	console.log(response)
+		      	this.lodding=false
+		      	if(response.body.error==0){
+		      		this.secondMenu=response.body.data[0].type_name
+		      		
+		      		this.data.salary=response.body.data[0].salary
+		      		this.data.type_id=response.body.data[0].type_id
+		      		this.data.type=response.body.data[0].type
+		      		this.data.contents=response.body.data[0].contents
+		      		this.data.smeta=response.body.data[0].smeta
+		      		this.data.connect=response.body.data[0].connect
+		      		this.data.tel=response.body.data[0].tel
+		      		this.data.is_hidename=response.body.data[0].is_hidename
+		      		this.data.name=response.body.data[0].name
+		      		this.data.id=this.$route.params.id
+		      	}
+			  });
   		}else{//发布技能
   			
   		}
@@ -177,13 +189,30 @@ export default {
 				var reader=new FileReader();
 						reader.readAsDataURL(event.target.files[0]);
 						reader.onload=function(){
-							  that.data.smeat=this.result
-							  console.log(that.data.smeat)
+							  that.data.smeta=this.result
+							  console.log(that.data.smeta)
 						}
 	    }  
   	},
   	submitBtn(){
+  		this.data.userid=localStorage.getItem("userId")
+  		var k=null
+  		for(k in this.data){
+				if(!this.data[k]&&k!="is_hidename"){
+					alert("您有必填项未填写！")
+					return
+				}
+  		}
   		console.log(this.data)
+  		
+  		//提交数据
+  		this.$http.post(this.Api+this.Url,this.data).then(response => {//获取用户数据
+//	      	this.lodding=false
+						console.log(response.body)
+	      	if(response.body.error==0){
+	      		this.$router.push("/lookTalent/"+this.Type+"/"+response.body.type)
+	      	}
+		  });
   	}
   }
 }

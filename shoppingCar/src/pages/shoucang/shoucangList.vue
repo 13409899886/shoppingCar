@@ -1,22 +1,26 @@
 <template>
-  <div style="min-height: 100%; padding-bottom: 80px;">
+<div>
+	
+	<div  v-if="shoucangList&&(!shoucangList.length>0)">没有了</div>
+  <div style="min-height: 100%; padding-bottom: 80px;" v-if="shoucangList.length>0">
   		<div class="weui-panel weui-panel_access">
 	        <div class="weui-panel__bd">
 	        	<!---->
 	        	<label class="weui-cells_checkbox" v-for="item in shoucangList"  @touchstart="ontouchstart($event)" @touchend="ontouchend"  >
 	            <div class="weui-media-box weui-media-box_appmsg" >
 				          <div class="weui-cell__hd" v-if="isconfig" >
-				            	<input type="checkbox" class="weui-check" @click="onChange($event,item)" :checked="item.ischeck">
+				            	<input type="checkbox" class="weui-check"   v-model="item.checked">
 				            	<i class="weui-icon-checked"></i>
-				       		</div>
-	                <div class="weui-media-box__hd">
+				       		</div>													
+				       		<!--:style="'background-image:url(+'item.smeta'+)'"-->
+	                <div class="weui-media-box__hd" >
 	                </div>
-	                <div class="weui-media-box__bd">
-	                   <h4 class="weui-media-box__title">{{item.title}}</h4>
-		                    <p class="weui-media-box__desc">￥50</p>
+	                <div class="weui-media-box__bd" @click="toDetail(item)">
+	                   <h4 class="weui-media-box__title">{{item.name}}</h4>
+		                    <p class="weui-media-box__desc">￥{{item.salary}}</p>
 		                    <ul class="weui-media-box__info">
-		                        <li class="weui-media-box__info__meta">浏览：100</li>
-		                        <li class="weui-media-box__info__meta">售出：5</li>
+		                        <li class="weui-media-box__info__meta">浏览：{{item.paynum}}</li>
+		                        <li class="weui-media-box__info__meta">售出：{{item.readnum}}</li>
 		                    </ul>
 	                </div>
 	            </div>
@@ -24,8 +28,8 @@
         	</div>
 		  </div>
 		  <div style="position: fixed;left: 0;bottom: 0;right: 0; z-index: 10000;box-shadow: 0 -1px 3px #d8d8d8; transition: all 1s;" v-show="isconfig">
-        	<div class="total flex flex-align-center flex-pack-justify">
-        		<label class="weui-cells_checkbox" >
+	    	<div class="total flex flex-align-center flex-pack-justify">
+	    			<label class="weui-cells_checkbox" >
 		            <div class="weui-cell__hd">
 		                <input type="checkbox" class="weui-check" @click="isallBtn($event)">
 		                <i class="weui-icon-checked"></i> 全选
@@ -35,10 +39,10 @@
 		       		<button type="button" class="weui-btn weui-btn_mini weui-btn_default" @click="isconfig=false">取消</button>
 		       		<button type="button" class="weui-btn weui-btn_mini weui-btn_default" @click="del">删除</button>
 		       	</div>
-        	</div>
-        	
-        </div>
+	    	</div>
+	    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -46,59 +50,72 @@
 export default {
   data(){
 		return{
+			userid:"",
 			startDate:null,
 			endDate:null,
 			timer:null,
 			isconfig:false,
-			shoucangList:[
-			{
-				title:"寻找心灵安慰师",
-				ischeck:false
-				
-			},
-			{
-				title:"找个人陪我逛街",
-				ischeck:false
-			},
-			{
-				title:"找个人打扫宿舍",
-				ischeck:false
-			}
-			
-			]
+			shoucangList:[]
 		}
   },
   components:{
 	},
+//	computed:{
+// 		shoucangComputed(){
+// 			return this.shoucangList
+// 		}
+// 	},
 	mounted(){
+		this.userid=localStorage.getItem("userId")
+		//获取收藏列表
+		this.$http.post(this.Api+"UserCenter/my_collect",{userid:this.userid}).then(response => {//获取用户数据
+      	
+      	if(response.body.error==0){
+				this.shoucangList=response.body.data
+				
+				console.log(this.shoucangList)
+      	}
+	  	});
 	},
 	methods:{
-		
+		toDetail(item){
+			console.log(item)
+			this.$router.push('/detail/'+item.collect_id+'/'+item.collect_type)
+		},
 		onChange(el,item){
-			console.log(item.ischeck)
-				item.ischeck=el.target.checked;//获取点击单选按钮的状态更新到模型数据
 			
+				item.ischeck=el.target.checked;//获取点击单选按钮的状态更新到模型数据
+			console.log(this.shoucangComputed)
 		},
 		isallBtn(el){
 			if(el.target.checked){
 					this.shoucangList.forEach((item,index)=>{
-						item.ischeck=true
-						
+						item.checked=true
 					})
 				}else{
 					this.shoucangList.forEach((item,index)=>{
-						item.ischeck=false
+						item.checked=false
 					})
 				}
+				console.log(this.shoucangList)
 		},
 		del(){
 			let len=this.shoucangList.length
+			var ids=[]
 			for(var i=len-1;i>-1;i--){
-				if(this.shoucangList[i].ischeck==true){
-							this.shoucangList.splice(this.shoucangList.indexOf(this.shoucangList[i]),1)
-							
+				if(this.shoucangList[i].checked==true){
+					
+					ids.push(this.shoucangList[i].id)//获取到选中的id
+						this.shoucangList.splice(this.shoucangList.indexOf(this.shoucangList[i]),1)//删除data里的数据更新视图
 					}
 			}
+			console.log(ids)
+			this.$http.post(this.Api+"UserCenter/delete",{ids:ids}).then(response => {//获取用户数据
+      	
+      	if(response.body.error==0){
+					console.log(response.body)
+      	}
+	  	});
 		},
 		ontouchstart(el){
 			this.startDate=new Date();

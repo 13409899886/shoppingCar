@@ -1,32 +1,32 @@
 <template>
   <div style="background:#fff;height: 100%;padding: 15px; padding-top: 50px;">
   	<p style=" text-align: center; font-size: 30px;">输入短信验证码</p>
-  	<p style="text-align: center;color: #999;">验证码已发送到1340******</p>
+  	<p style="text-align: center;color: #999;">验证码已发送到{{tel}}</p>
 			
 		<div class="weui-cells flex flex-pack-center">
         <div class="weui-cell">
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="" v-model="code1" @change="verify(code1)"  v-focus="'空'">
+                <input class="weui-input" type="tel" placeholder="" v-model="code1" @change="verify(code1)"  v-focus="'空'">
             </div>
         </div>
         <div class="weui-cell">
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="" v-model="code2" v-focus2="code1" @change="verify(code2)">
+                <input class="weui-input" type="number" placeholder="" v-model="code2" v-focus2="code1" @change="verify(code2)">
             </div>
         </div>
         <div class="weui-cell">
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="" v-model="code3" v-focus3="code2" @change="verify(code3)">
+                <input class="weui-input" type="number" placeholder="" v-model="code3" v-focus3="code2" @change="verify(code3)">
             </div>
         </div>
         <div class="weui-cell">
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="" v-model="code4" v-focus4="code3" @change="verify(code4)">
+                <input class="weui-input" type="number" placeholder="" v-model="code4" v-focus4="code3" @change="verify(code4)">
             </div>
         </div>
         <div class="weui-cell">
             <div class="weui-cell__bd">
-                <input max="1" class="weui-input" type="text" placeholder="" v-model="code5" v-focus5="code4" @change="verify(code5)">
+                <input max="1" class="weui-input" type="number" placeholder="" v-model="code5" v-focus5="code4" @change="verify(code5)">
             </div>
         </div>
         <div class="weui-cell">
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-		<p style="color: #999; line-height: 2;">59秒后可重新发送</p>
+		<p style="color: #999; line-height: 2;" v-show="isShow">{{minus}}秒后可重新发送</p>
 		
   </div>
 </template>
@@ -50,7 +50,11 @@ export default {
 			code3:"",
 			code4:"",
 			code5:"",
-			code6:""
+			code6:"",
+			timer:null,
+			minus:60,
+			isShow:false,
+			tel:""
 		}
   },
   components:{
@@ -90,16 +94,37 @@ export default {
 	methods:{
 		
 		verify(num){
-		
+			this.tel=localStorage.getItem("tel")
 			if(this.code1&&this.code2&&this.code3&&this.code4&&this.code5&&this.code6){
-				alert("输入完成")
+				this.lodding=true
+				this.$http.post(this.Api+'Login/Login',{tel:this.tel,yzm:this.code1+this.code2+this.code3+this.code4+this.code5+this.code6}).then(response => {
+		      	this.lodding=false
+		      	if(response.body.error==0){
+		      		alert("绑定手机成功")
+		      		this.$router.go(-2)
+		      		
+		      	}
+			  });
 			}else{
 				return 0
 			}
 		}
 	},
 	mounted(){
-		
+		this.tel=localStorage.getItem("tel")
+		console.log(this.tel)
+		this.isShow=true
+		var that=this
+		this.timer=setInterval(function(){
+  			that.minus--,
+  			
+  			console.log(that.minus);//成功回调
+  			if(that.minus<=0){
+  				clearInterval(that.timer)
+  				that.minus=60
+  				that.isShow=false
+  			}
+  		},1000)
 	},
 	directives: {
     focus: {

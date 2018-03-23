@@ -69,7 +69,13 @@ export default {
   	"$route":"jianting"
   },
   mounted(){
-		
+//		//获取底部导航参数
+//	  this.$http.get(this.Api+'Banner/bootimg').then(response => {
+//    	if(response.body.error==0){
+//    		console.log(response.body.data)
+//    	}
+//    
+//	  });
   },
   created(){
   	this.jianting()

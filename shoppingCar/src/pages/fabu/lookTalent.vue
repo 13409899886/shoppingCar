@@ -1,6 +1,6 @@
 <template>
   <div style="padding-bottom: 80px;">
-  	<div class="weui-panel weui-panel_access comment">
+  	<!--<div class="weui-panel weui-panel_access comment">
         <div class="weui-panel__bd">
             <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
                 <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
@@ -12,30 +12,23 @@
             </a>
             
         </div>
-    </div>
+    </div>-->
+    
     <div class="weui-panel weui-panel_access comment">
         <div class="weui-panel__hd">达人推荐</div>
-        <div class="weui-panel__bd">
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" >
+        <div class="nodata" v-if="talentList&&talentList.length<=0">没有数据</div>
+        <div class="weui-panel__bd" >
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" v-for="item in talentList">
                 <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
                 <div class="weui-media-box__bd">
-                    <h4 class="weui-media-box__title">张三 <span>￥50</span></h4>
+                    <h4 class="weui-media-box__title">{{item.connect}} <span>￥{{item.salary}}</span></h4>
                     <p class="weui-media-box__desc">
                     	<img src="../../../static/images/star-all.png"/><img src="../../../static/images/star-line.png"/>
                     </p>
-                    <h4 class="weui-media-box__title">我擅长吉他入门指法</h4>
+                    <h4 class="weui-media-box__title">{{item.contents}}</h4>
                 </div>
             </a>
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
-                <div class="weui-media-box__bd">
-                    <h4 class="weui-media-box__title">张三 <span>￥80</span></h4>
-                    <p class="weui-media-box__desc">
-                    	<img src="../../../static/images/star-all.png"/><img src="../../../static/images/star-line.png"/>
-                    </p>
-                    <h4 class="weui-media-box__title">我擅长吉他入门指法</h4>
-                </div>
-            </a>
+            
         </div>
     </div>
 		
@@ -48,12 +41,29 @@
 export default {
   data(){
 		return{
+			Url:"",
+			page:"0",
+			type:null,
+			talentList:null
 		}
   },
   components:{
 	},
 	mounted(){
-		
+		this.type=this.$route.params.type
+		if(this.$route.params.Type=="task"){
+			this.Url="Mission/find_jndr"
+		}else{
+			this.Url="Skill/find_rwdr"
+		}
+		this.$http.post(this.Api+this.Url,{"type":this.type,page:1}).then(response => {//获取用户数据
+//	      	this.lodding=false
+						console.log(response.body)
+	      	if(response.body.error==0){
+	      		this.talentList=response.body.data
+	      	}
+		  });
+		 
 	}
 }
 </script>
