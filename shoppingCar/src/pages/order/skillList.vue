@@ -1,6 +1,7 @@
 <template>
   <div style="min-height: 100%;">
-  	<span v-if="fabuList&&fabuList.length=='0'">没有数据</span>
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
+  	<span v-if="fabuList&&fabuList.length=='0'" class="empty">没有数据</span>
   	<div class="weui-panel weui-panel_access" v-if="fabuList" v-for="item in fabuList">
         <div class="weui-panel__bd">
             <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">

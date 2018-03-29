@@ -1,6 +1,7 @@
 <template>
-  <div style="min-height: 100%;">
-  	<span v-if="fabuList&&fabuList.length=='0'">没有数据</span>
+  <div id="box">
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
+  	<span v-if="fabuList&&fabuList.length=='0'" class="empty">没有数据</span>
   	<div class="weui-panel weui-panel_access" v-if="fabuList" v-for="item in fabuList">
         <div class="weui-panel__bd">
             <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" @click="toDetail(item)">
@@ -30,16 +31,38 @@
 export default {
   data(){
 		return{
-			fabuList:null,
+			fabuList:[],
 			type:"",
 			Url:"",//编辑地址
 			userid:"",
 			delUrl:"",//删除地址
 			lodding:false,
-			typeId:null//区分技能和任务
+			typeId:null,//区分技能和任务
+			page:1,
+			count:""
 		}
   },
   mounted(){
+  	var that=this
+		//监听页面滑动
+  	setTimeout(()=>{
+			document.getElementById('box').addEventListener('scroll', function(){  
+	  		console.log("滑动了")
+	  		//下面这句主要是获取网页的总高度，主要是考虑兼容性所以把Ie支持的documentElement也写了，这个方法至少支持IE8  
+        var htmlHeight=document.getElementById('box').scrollHeight||document.getElementById('box').scrollHeight;  
+        //clientHeight是网页在浏览器中的可视高度，  
+        var clientHeight=document.body.clientHeight||document.documentElement.clientHeight;  
+        //scrollTop是浏览器滚动条的top位置，  
+        var scrollTop=document.getElementById('box').scrollTop||document.getElementById('box').scrollTop;  
+        //通过判断滚动条的top位置与可视网页之和与整个网页的高度是否相等来决定是否加载内容；
+        console.log(that.count)
+        if(scrollTop+clientHeight==htmlHeight&&that.page<that.count){  
+       		that.page++
+       		that.getData()
+        }
+	    });
+		},500) 
+  	
   	this.userid=this.$route.params.userid
   	this.type=this.$route.params.type
   	if(this.type=="task"){
@@ -51,15 +74,21 @@ export default {
   		this.delUrl="skill/delete"
   		this.typeId=2
   	}
-		this.$http.post(this.Api+this.Url,{userid:this.userid}).then(response => {//获取用户数据
+		this.getData()
+  },
+  methods:{
+  	getData(){
+  		this.$http.post(this.Api+this.Url,{userid:this.userid,page:this.page}).then(response => {//获取用户数据
       	console.log(response)
       	this.lodding=false
       	if(response.body.error==0){
-      		this.fabuList=response.body.data
+      		this.count=response.body.count
+      		for(var k in response.body.data){
+	      			this.fabuList.push(response.body.data[k])
+	      		}
       	}
-	  });
-  },
-  methods:{
+	  	});
+  	},
   	toDetail(item){//查看详情
 			console.log(item)
 			this.$router.push('/detail/'+item.id+'/'+this.typeId)

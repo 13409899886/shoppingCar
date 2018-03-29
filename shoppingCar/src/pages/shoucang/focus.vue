@@ -1,5 +1,6 @@
 <template>
   <div style="padding-bottom: 80px;">
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
       <div v-if="indexData">
         <div class="weui-panel weui-panel_access">
             <div class="weui-panel__bd">
@@ -73,7 +74,7 @@ export default {
 	methods:{
 		isFocus(item){
 			this.isshow=true;
-			this.attention_userid=item.id;//获取对方id
+			this.attention_userid=item.uid;//获取对方id
 			this.obj=item
 		},
 		submitBtn(){//更改关注状态

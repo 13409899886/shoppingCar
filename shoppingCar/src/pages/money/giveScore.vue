@@ -1,5 +1,6 @@
 <template>
   <div style="background:#f0f0f0;height: 100%; padding: 15px;">
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
   	<div class="box">
   		<div class="weui-panel weui-panel_access">
 	  		<div class="weui-media-box weui-media-box_appmsg">
@@ -38,7 +39,8 @@
 		            </div>
 		            <div class="weui-uploader__bd">
 			                <ul class="weui-uploader__files" id="uploaderFiles">
-			                    <li class="weui-uploader__file " v-if="data.smeta" @click="data.smeta=null" :style="'background-image:url('+data.smeta+')'">
+			                    <li class="weui-uploader__file "  :style="'background-image:url('+item+')'" v-for="(item,index) in data.smeta" @click="delImg(index)">
+			                    	<i class="weui-icon-cancel"></i>
 			                    </li>
 			                </ul>
 			                <div class="weui-uploader__input-box">
@@ -63,7 +65,7 @@ export default {
 			smeta:null,
 			connect:null,
 			data:{
-				smeta:"",
+				smeta:[],
 				grade:1,
 				content:"",
 				userid:null,
@@ -85,17 +87,20 @@ export default {
 		this.data.goods_type=this.$route.params.goods_type
 	},
 	methods:{
+		delImg(index){
+			this.data.smeta.splice(index,1)
+		},
 		uplod(event){//上传照片转换为base64
   		if(event.target.files.length>0){  
         var that=this
-        console.log("点击了")
 				var reader=new FileReader();
 						reader.readAsDataURL(event.target.files[0]);
 						reader.onload=function(){
-							  that.data.smeta=this.result
+							  that.data.smeta.push(this.result)
+							  
 						}
 	    }  
- 	 },
+  	},
   	submitBtn(){
   		var k=null
   		for(k in this.data){
@@ -105,7 +110,8 @@ export default {
   				return;
   			}
   		}
-  		
+  		console.log(this.data)
+  		return ;
   		this.$http.post(this.Api+"Mission/add_pingjia",this.data).then(response => {//获取数据
       	console.log(response)
       	this.lodding=false
@@ -129,4 +135,7 @@ export default {
 	.star.on{background-image: url(../../../static/images/star-all.png)}
 	.starDetail p{font-size: 14px; color: #ffa515;text-align: center;}
 	.weui-media-box__hd{ background: url(../../../static/images/newsLogo.png) no-repeat center center; background-size: cover; margin-right: 10px;}
+	.weui-icon-cancel{position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);}
+	.weui-uploader__file{position: relative;}
+	
 </style>

@@ -1,11 +1,18 @@
 <template>
   <div style="padding-bottom: 80px;" >
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
   <div v-if="squareDetail">
 	  <div class="weui-panel weui-panel_access squareInfo" style="margin-top: 0;" >
         <div class="weui-media-box weui-media-box_text">
 	        <h4 class="weui-media-box__title">{{squareDetail.title}} <span>{{squareDetail.add_time| formatDate}}</span></h4>
 		        
-		        <p class="weui-media-box__desc">{{squareDetail.contents}}</p>
+		        <p class="weui-media-box__desc">
+		        	{{squareDetail.contents}}
+		        	<div class="flex">
+            		<div class="weui-media-box__hd" :style="'background-image:url('+imgs+')'" v-for="imgs in squareDetail.image"></div> 
+            	</div>
+		        </p>
+		         
 		        <ul class="weui-media-box__info">
 		            <li class="weui-media-box__info__meta">关注 {{squareDetail.zansum}}</li>
 		            <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">评论 {{squareDetail.countsum}}</li>
@@ -20,13 +27,13 @@
     
     <div class="weui-panel weui-panel_access comment">
         <div class="weui-panel__bd">
-            <div class="weui-media-box weui-media-box_appmsg" v-for="item in squareDetail.list">
+            <div class="weui-media-box weui-media-box_appmsg" v-for="(item, index) in squareDetail.list">
                 <div class="weui-media-box__hd" :style="'background-image: url('+item.userimg+');'"></div>
                 <div class="weui-media-box__bd">
                     <h4 class="weui-media-box__title">{{item.name}} <span @click="zan(item)"><img src="../../../../static/images/tobegood.png" v-if="item.is_zan==0" /><img src="../../../../static/images/good.png" v-if="item.is_zan==1" />{{item.zansum}}</span></h4>
-                    <div class="weui-media-box__desc">{{item.comment}}</div>
-                    <div class="weui-media-box__desc flex" v-for="comeback in item.answer" @click="reply(comeback)">
-                    	<div style="white-space: nowrap;"><span>{{comeback.name}} </span>回复<span> {{item.name}}：</span></div>
+                    <div class="weui-media-box__desc" @click="reply(item,index)">{{item.comment}}</div>
+                    <div class="weui-media-box__desc flex" v-for="comeback in item.answer" @click="reply(comeback,index)">
+                    	<div style="white-space: nowrap;"><span>{{comeback.name}} </span>回复<span> {{comeback.pname}}：</span></div>
                     	<div>{{comeback.comment}}</div>
                     </div>
                 </div>
@@ -63,8 +70,9 @@ export default {
 			type:"评论",
 			userInfo:"",
 			byreply_userid:"",//评论者id
-			comment_id:""//评论id
-			
+			comment_id:"",//评论id
+			index:null,
+			pname:""
 		}
   },
   filters: {
@@ -79,9 +87,14 @@ export default {
 		this.lodding=true
 		this.userid=localStorage.getItem("userId")
 		this.squareId=this.$route.params.id
+		if(!this.userid){
+			alert("请登陆！")
+		 	this.$router.push("/login")
+		}
 		this.userInfo=JSON.parse(localStorage.getItem("userInfo"))
 		//获取广场详情
-	  this.$http.post(this.Api+'Mysquare/sqdetail',{id:this.squareId,userid:this.userid}).then(response => {
+	  this.$http.post(this.Api+'Mysquare/sqdetail',{id:this.squareId,userid:6}).then(response => {
+      	console.log(response.body)
       	if(response.body.error==0){
       		console.log(response.body)
       		this.squareDetail=response.body
@@ -111,19 +124,24 @@ export default {
 		      	this.lodding=false
 		  		});
 		},
-		reply(comeback){//点击评论数据回复功能
+		reply(comeback,index){//点击评论数据回复功能
 			this.type="回复"
 			this.on=true
 			this.byreply_userid=comeback.userid
 			this.comment_id=comeback.comment_id
+			this.index=index
+			this.pname=comeback.name
+			console.log(this.pname)
 		},
 		search(){
 			this.on=true
 		},
 		onblur(){
 			this.on=false;
+			console.log(this.contents=="")
 			if(this.userid){
-				if(this.contents==""){
+				if(this.contents==""||this.byreply_userid==this.userid){
+					alert("大哥 回复自己干啥？？")
 					return;
 				}
 				this.lodding=true
@@ -132,16 +150,20 @@ export default {
 		      	if(response.body.error==0){
 		      	console.log(response.body)
 		      	
+		      		this.squareDetail.list[this.index].answer.push({'comment':this.contents,name:this.userInfo.name,pname:this.pname})
+		      	
 		      	this.type="评论"
 	      		}
 		      	this.lodding=false
+		      	this.contents=""
 		  		});
 				}else if(this.type=='评论'){//回复给发布者
 					this.$http.post(this.Api+"Mysquare/add_comment",{userid:this.userid,article_id:this.squareId,"comment":this.contents}).then(response => {//发表评论
 		      	if(response.body.error==0){
-		      	console.log(response.body)
-		      	this.lodding=false
-		      	this.squareDetail.list.push({'comment':this.contents,userimg:this.userInfo.image,name:this.userInfo.name,is_zan:0})
+			      	console.log(response.body)
+			      	this.lodding=false
+			      	this.squareDetail.list.push({'comment':this.contents,userimg:this.userInfo.image,name:this.userInfo.name,is_zan:0})
+			      	this.contents=""
 	      		}
 		  		});
 				}
@@ -185,7 +207,7 @@ export default {
     background-position: center center;
     background-size: cover;
     background-color: #f0f0f0;
-    
+    width: 80px; height: 80px;background-color: #fff;margin-right: 10px;
 		}
 		.comment .weui-media-box_appmsg{
 			-webkit-box-align: start; 
@@ -205,4 +227,5 @@ export default {
 		.squareInfo .weui-media-box__info :last-child{float: right;}
 		.weui-media-box__title img{height: 17px;}
 		.weui-media-box__desc span{color: #000;}
+		.weui-media-box__desc{display: block;text-align: justify;}
 </style>

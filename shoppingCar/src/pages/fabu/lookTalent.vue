@@ -1,24 +1,11 @@
 <template>
   <div style="padding-bottom: 80px;">
-  	<!--<div class="weui-panel weui-panel_access comment">
-        <div class="weui-panel__bd">
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
-                <div class="weui-media-box__bd">
-                    <h4 class="weui-media-box__title">我想学吉他 <span>2013.0.1</span></h4>
-                    
-                    <div class="weui-media-box__desc">老师很好，很好学。</div>
-                </div>
-            </a>
-            
-        </div>
-    </div>-->
-    
+		<div class="comeBack" @click="$router.go(-1)">返回</div>    
     <div class="weui-panel weui-panel_access comment">
         <div class="weui-panel__hd">达人推荐</div>
         <div class="nodata" v-if="talentList&&talentList.length<=0">没有数据</div>
         <div class="weui-panel__bd" >
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" v-for="item in talentList">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" v-for="item in talentList" @click="toDetail(item)">
                 <div class="weui-media-box__hd" style="background-image:url(../../../static/images/newsLogo.png)"></div> 
                 <div class="weui-media-box__bd">
                     <h4 class="weui-media-box__title">{{item.connect}} <span>￥{{item.salary}}</span></h4>
@@ -64,6 +51,15 @@ export default {
 	      	}
 		  });
 		 
+	},
+	methods:{
+		toDetail(item){
+			if(this.$route.params.Type=="task"){
+				this.$router.push("/detail/"+item.id+"/2")
+			}else{
+				this.$router.push("/detail/"+item.id+"/1")
+			}
+		}
 	}
 }
 </script>

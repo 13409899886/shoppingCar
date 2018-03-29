@@ -1,7 +1,8 @@
 <template>
-  <div style="padding-bottom: 80px;" >
-  	<div v-if="data">
-  		<img :src="data.goods_info[0].goods_smeta" alt="" class="banner"/>
+  <div style="padding-bottom: 80px;" id="box">
+  	<div class="comeBack" @click="$router.go(-1)" >返回</div>
+  	<div v-if="data" >
+  		<div class="banner" :style="'background-image:url('+data.goods_info[0].goods_smeta+')'"></div>
 	    <div class="weui-panel weui-panel_access " style="margin-top: 0;">
         <div class="weui-media-box weui-media-box_text goodsInfo" v-for="item in data.goods_info">
 	        <h4 class="weui-media-box__title">{{item.goods_name}}  <span>
@@ -28,7 +29,6 @@
 	                    <p class="weui-media-box__desc">￥{{item.salary}}</p>
 	                </div>
 	            </div>
-	            
 	        </div>
         </div>
     </div>
@@ -52,12 +52,7 @@
                     </div>
                 </a>
             </div>
-            <div class="weui-panel__ft">
-                <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
-                    <div class="weui-cell__bd">查看更多</div>
-                    <span class="weui-cell__ft"></span>
-                </a>    
-            </div>
+            
         </div>
     		<div class="weui-panel weui-panel_access kecheng" v-if="data&&data.conmecommercial_list.length>0" >
             <div class="weui-panel__hd">更多商家</div>
@@ -69,6 +64,7 @@
                         <p class="weui-media-box__desc">￥{{item.salary}}</p>
                     </div>
                 </a>
+                
             </div>
         </div>
     		<div class="pay flex flex-pack-justify flex-align-center">
@@ -116,15 +112,16 @@ export default {
   },
   components:{
 	},
+	updated(){
+		document.getElementById('box').scrollTop=-1000000; //通过scrollTop设置滚动到100位置
+	},
 	mounted(){
+		
+		
 		this.lodding=true
 		this.userid=localStorage.getItem("userId")
 		this.type=this.$route.params.type //判断任务技能
 		this.id=this.$route.params.id //获取列表id
-		
-		
-		
-		
 		//获取数据
 	  this.$http.post(this.Api+"Goodsxq/index",{id:this.id,type:this.type}).then(response => {
       	if(response.body.error==0){
@@ -161,6 +158,7 @@ export default {
 	  });
 	},
 	methods:{
+	
 		shoucang(item){//添加收藏
 			
 			if(this.userid){
@@ -196,8 +194,11 @@ export default {
 		},
 		focu(){
 			if(this.userid){
+				if(this.userid==this.data.goods_info[0].userid){
+					return;
+				}
 				this.lodding=true
-				this.$http.post(this.Api+"UserCenter/attention_user",{userid:this.userid,attention_userid:this.id}).then(response => {//切换关注状态
+				this.$http.post(this.Api+"UserCenter/attention_user",{userid:this.userid,attention_userid:this.data.goods_info[0].userid}).then(response => {//切换关注状态
 	      	if(response.body.error==0){
 	      		alert(response.body.msg)
 	      		this.lodding=false;
@@ -219,7 +220,7 @@ export default {
 </script>
 
 <style scoped>
-	.banner{display: block;width: 100%;}
+	.banner{display: block;width: 100%;height: 200px; background-position: center center; background-repeat: no-repeat;background-size: cover;}
 	.pay{position: fixed;left: 0; right: 0; bottom: 0; text-align: right;padding: 10px; background: #fff; color: #fca120; box-shadow: 0 0 5px #f0f0f0;}
 	.pay .weui-btn {vertical-align:middle; margin-left: 15px; background-color: #fca120;}
 	.weui-media-box__hd{
@@ -245,4 +246,5 @@ export default {
 		.weui-btn{margin: 0; font-size: 17px; background:-webkit-linear-gradient(top,#ffa515,#ff7e3d);}
 		.weui-tabbar__icon{width: 23px; height: 23px;}
 		.goodsInfo .weui-media-box__title span{margin-left: 15px; font-size: 15px; color: #ffa515;}
+		.goodsInfo .weui-media-box__desc{display: block;}
 </style>

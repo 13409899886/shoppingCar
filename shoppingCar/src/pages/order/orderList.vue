@@ -1,5 +1,6 @@
 <template>
   <div style="min-height: 100%;">
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
   	<div class="weui-navbar">
         <div class="weui-navbar__item " @click="tabChange(0)" :class="{'weui-bar__item_on':nowIndex==0}">
             未支付
@@ -32,6 +33,7 @@
             
         </div>
     </div>
+    <span v-if="orderList&&orderList.length=='0'" class="empty">没有数据</span>
 	    <i class="weui-loading" v-show="lodding" style=""></i>
   </div>
 </template>

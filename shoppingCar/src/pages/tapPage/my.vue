@@ -3,7 +3,7 @@
   	<i class="weui-loading" v-show="lodding" style=""></i>
   	<div v-if="userInfo">
 	  	<div class="userInfo flex flex-v flex-align-center flex-pack-center">
-	  		<div class="config">
+	  		<div class="config" style="opacity: 0;">
 	  				<img src="../../../static/images/site.png"/>
 	  		</div>
 	  		<div class="userPic"></div>
@@ -99,6 +99,13 @@
             <div class="weui-cell__ft"></div>
         </router-link>
     	</div>
+    	<div class="weui-cells weui-panel" style="text-align: center;color:#ffa515">
+    		<a href="javascript:;" class="weui-cell weui-cell_access js_item" @click="logout" >
+            <div class="weui-cell__bd">
+                <p>退出当前账号</p>
+            </div>
+        </a>
+    	</div>
     </div>
   </div>
 </template>
@@ -116,30 +123,31 @@ export default {
   mounted(){
   	this.userid=localStorage.getItem("userId")
   	this.lodding=true
-  	//如果本地没有用户信息就查询是否有用户id 如果没有就跳转登陆 如果有就从服务器获取
-  	if(localStorage.getItem("userInfo")){
-  		this.userInfo=JSON.parse(localStorage.getItem("userInfo"))
-  		this.lodding=false
-  		console.log(this.userInfo)
-  	}
-  	if(this.userInfo==null){
+//	//如果本地没有用户信息就查询是否有用户id 如果没有就跳转登陆 如果有就从服务器获取
+//	if(localStorage.getItem("userInfo")){
+//		this.userInfo=JSON.parse(localStorage.getItem("userInfo"))
+//		this.lodding=false
+//		console.log(this.userInfo)
+//	}
   		if(localStorage.getItem("userId")){
 	  		this.$http.post(this.Api+'UserCenter/index',{userid:this.userid}).then(response => {//获取用户数据
 		      	console.log(response)
 		      	this.lodding=false
 		      	if(response.body.error==0){
 		      		this.userInfo=response.body.data
-		      		localStorage.setItem("userInfo",JSON.stringify(response.body.data))//登陆成功存储用户id
+		      		localStorage.setItem("userInfo",JSON.stringify(response.body.data))//登陆成功存储用户信息
 		      	}
 			  });
 	  	}else{
 	  		this.$router.push("/login")
 	  	}
-  	}
-  	
   },
   methods:{
   	
+  	logout(){
+  		localStorage.clear("uesrInfo")	
+  		this.$router.push("/login")
+  	}
   	
   }
 }

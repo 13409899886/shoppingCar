@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import myRouter from "vue-router"
@@ -14,6 +15,7 @@ import Message from './pages/tapPage/message'
 import My from './pages/tapPage/my'
 import Product from './pages/tapPage/indexpage/productDetails'
 import AllH from './pages/tapPage/indexpage/allList'
+import NewsList from './pages/tapPage/indexpage/newsList'
 import squareDetails from './pages/tapPage/square/squareDetails'
 import Fabiao from './pages/tapPage/square/fabiao'
 import Task from './pages/fabu/fabuTask'
@@ -31,21 +33,20 @@ import FocusList from './pages/shoucang/focus'
 import ChangeBindTel from './pages/login/changeBindTel'
 import Telcode from './pages/login/telcode'
 import LookTalent from './pages/fabu/lookTalent'
-Vue.prototype.Api="http://192.168.31.233/fenghuaxiaoyuan/code/index.php?s=Api/"
-//Vue.prototype.Api="http://fhxy.helpxue.com/Api/index.php?s=Api/"
+import EvaluateDetail from './pages/tapPage/message/evaluateDetail'
+import ActivityMessage from './pages/tapPage/message/activityMessage'
+//Vue.prototype.Api="http://192.168.31.233/fenghuaxiaoyuan/code/index.php?s=Api/"
+Vue.prototype.Api="http://fhxy.helpxue.com/Api/index.php?s=Api/"
+import NewsDetail from './pages/tapPage/newsDetail'
 Vue.http.options.emulateJSON = true;
-let router=new myRouter({
+var router=new myRouter({
 	mode:"history",
-//	base:"/wwwroot/fhxy.helpxue.com/",
+//	base:"/html/",
 	routes:[
 		{
 			path:"/",
 			redirect:"/index/0"
 		},
-//{
-//			path:"/",
-//			redirect:"/login"
-//		},
 		{
 			path:"/",
 			component:Index,
@@ -57,12 +58,16 @@ let router=new myRouter({
 			]
 		},
 		{
-			path:"/detail/:id/:type",
+			path:"/detail/:id/:type", 
 			component:Product
 		},
 		{
 			path:"/all/:type",
 			component:AllH
+		},
+		{
+			path:"/NewsList",
+			component:NewsList
 		},
 		{
 			path:"/squareDetails/:id",
@@ -131,6 +136,18 @@ let router=new myRouter({
 		{
 			path:"/giveScore/:touserid/:goods_id/:goods_type",
 			component:GiveScore
+		},
+		{
+			path:"/evaluateDetail/:ID",
+			component:EvaluateDetail
+		},
+		{
+			path:"/activityMessage",
+			component:ActivityMessage
+		},
+		{
+			path:"/newsDetail/:id/:type",//id 文章id type 区分父级页面
+			component:NewsDetail
 		}
 	]
 })

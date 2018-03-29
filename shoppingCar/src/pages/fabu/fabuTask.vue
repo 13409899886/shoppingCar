@@ -1,23 +1,24 @@
 <template>
   <div class="c-p-form" style="min-height: 100%;">
+  	<div class="comeBack" v-show="!isshow" @click="$router.go(-1)">返回</div>
   	<test v-show="isshow" @onclose="close"></test>
   	<div v-show="!isshow">
   			<div class="weui-cells weui-cells_form">
            <a class="weui-cell weui-cell_access" href="javascript:;" @click="isshow=!isshow">
                 <div class="weui-cell__bd weui-cell_primary">
-                    <p>类型</p>
+                    <p>{{TypeText}}类型</p>
                 </div>
                 <span class="weui-cell__ft">{{secondMenu}}</span>
             </a>
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">任务酬劳：</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">{{TypeText}}酬劳：</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text"  placeholder="请输入酬劳" v-model="data.salary"/>
+                    <input class="weui-input" type="number"  placeholder="请输入酬劳" v-model="data.salary"/>
                 </div>
             </div>
             
 	        <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">任务名称：</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">{{TypeText}}名称：</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="text" pattern="[0-9]*" placeholder="请输入任务名称"  v-model="data.name"/>
                 </div>
@@ -25,17 +26,17 @@
         </div>
 			    
         <div class="weui-cells weui-cells_form">
-            <div class="weui-cells__title" style="font-size: 17px; color: #333;">任务详情：</div>
+            <div class="weui-cells__title" style="font-size: 17px; color: #333;">{{TypeText}}详情：</div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="请输入任务详情" rows="3"  v-model="data.contents"></textarea>
+                    <textarea class="weui-textarea" placeholder="请输入详情" rows="3"  v-model="data.contents"></textarea>
                     <div class="weui-textarea-counter"><span>0</span>/200</div>
                 </div>
             </div>
-            <div class="weui-cells weui-cells_form" style="padding: .3rem; ">
+            <div class="weui-cells weui-cells_form" style="padding: 10px; ">
 			       <div class="weui-uploader">
 			            <div class="weui-uploader__hd" style="font-size: 18px;">
-			                <p class="weui-uploader__title" >任务图像：</p>
+			                <p class="weui-uploader__title" >{{TypeText}}图像：</p>
 			            </div>
 			            <div class="weui-uploader__bd">
 			                <ul class="weui-uploader__files" id="uploaderFiles">
@@ -59,7 +60,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">联系电话：</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text"  placeholder="请输入联系电话" v-model="data.tel"/>
+                    <input class="weui-input" type="number"  placeholder="请输入联系电话" v-model="data.tel"/>
                 </div>
             </div>
             <div class="weui-cell weui-cell_switch">
@@ -89,6 +90,7 @@ export default {
 			isshow:false,
 			lodding:false,
 			Type:null,//区分任务或技能
+			TypeText:"",
 			Id:null,//用户id
 			topMenu:"",
 			secondMenu:"",
@@ -117,9 +119,13 @@ export default {
   	//区别是否是编辑
   	this.Id=this.$route.params.id
   	//获取用户id 如果没有就提示登陆
-  	
+  	this.data.userid=localStorage.getItem("userId")
+  	if(!this.data.userid){
+				this.$router.push("/login")
+			}
   	//如果是task类型就是任务 skill就是技能  如果id不等于no就是编辑 否则发布
   	if(this.Type=="task"){
+  		this.TypeText="任务"
   		this.Url="Mission/add_mission" //确定提交接口地址
   		//获取选中类型
   		if(this.Id!="no"){//编辑任务
@@ -148,6 +154,7 @@ export default {
   		}
   	}else if(this.Type=="skill"){
   		this.Url="Skill/add_skill" //确定提交接口地址
+  		this.TypeText="技能"
   		if(this.Id!="no"){//编辑技能
   			this.lodding=true
   			this.$http.post(this.Api+'Skill/skill_xq',{id:this.Id}).then(response => {//获取用户数据
@@ -195,11 +202,13 @@ export default {
 	    }  
   	},
   	submitBtn(){
-  		this.data.userid=localStorage.getItem("userId")
+  		this.lodding=true
+  		
   		var k=null
   		for(k in this.data){
 				if(!this.data[k]&&k!="is_hidename"){
 					alert("您有必填项未填写！")
+					this.lodding=false
 					return
 				}
   		}
@@ -207,7 +216,7 @@ export default {
   		
   		//提交数据
   		this.$http.post(this.Api+this.Url,this.data).then(response => {//获取用户数据
-//	      	this.lodding=false
+	      	this.lodding=false
 						console.log(response.body)
 	      	if(response.body.error==0){
 	      		this.$router.push("/lookTalent/"+this.Type+"/"+response.body.type)

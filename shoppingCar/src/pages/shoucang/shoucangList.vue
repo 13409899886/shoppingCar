@@ -1,7 +1,7 @@
 <template>
 <div>
-	
-	<div  v-if="shoucangList&&(!shoucangList.length>0)">没有了</div>
+	<div class="comeBack" @click="$router.go(-1)">返回</div>
+	<div  v-if="shoucangList&&(!shoucangList.length>0)" class="empty">没有了</div>
   <div style="min-height: 100%; padding-bottom: 80px;" v-if="shoucangList.length>0">
   		<div class="weui-panel weui-panel_access">
 	        <div class="weui-panel__bd">
@@ -100,7 +100,7 @@ export default {
 				console.log(this.shoucangList)
 		},
 		del(){
-			let len=this.shoucangList.length
+			var len=this.shoucangList.length
 			var ids=[]
 			for(var i=len-1;i>-1;i--){
 				if(this.shoucangList[i].checked==true){

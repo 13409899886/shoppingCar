@@ -1,5 +1,6 @@
 <template>
   <div class="c-p-form" style="min-height: 100%;">
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
   			<div class="weui-cells weui-cells_form">
             <router-link :to="{path:'/fabuClassify'}" class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__bd weui-cell_primary">

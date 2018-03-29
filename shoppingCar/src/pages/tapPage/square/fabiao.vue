@@ -18,6 +18,23 @@
             </div>
         </div>
     </div>
+    <div class="weui-cells weui-cells_form" style="padding: 10px; ">
+       <div class="weui-uploader">
+            <div class="weui-uploader__hd" style="font-size: 18px;">
+                <p class="weui-uploader__title" >任务图像：</p>
+            </div>
+            <div class="weui-uploader__bd">
+                <ul class="weui-uploader__files" id="uploaderFiles">
+                    <li class="weui-uploader__file "  :style="'background-image:url('+item+')'" v-for="(item,index) in data.image" @click="delImg(index)">
+                    	<i class="weui-icon-cancel"></i>
+                    </li>
+                </ul>
+                <div class="weui-uploader__input-box">
+                    <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*"  @change="uplod($event)" />
+                </div>
+            </div>
+        </div>
+    </div>
     <i class="weui-loading" v-show="lodding" style=""></i>
   </div>
 </template>
@@ -31,7 +48,8 @@ export default {
 			data:{
 				userid:null,
 				contents:"",
-				title:""
+				title:"",
+				image:[]
 			}
 		}
   },
@@ -44,13 +62,16 @@ export default {
     
   },
 	methods:{
+		delImg(index){
+			this.data.image.splice(index,1)
+		},
 		submitBtn(){
 			this.lodding=true
-			if(!this.data.contents&&!this.data.title){
+			if(!this.data.contents||!this.data.title||this.data.image.length<=0){
 				alert("您的输入有误")
 				this.lodding=false
 				return;
-			}else if(!this.userid){
+			}else if(!this.data.userid){
 				this.$router.push("/login")
 			}
 			console.log(this.data)
@@ -61,12 +82,26 @@ export default {
 	      		this.$router.push("/square/1")
 	      	}
 		  });
-		}
+		},
+		uplod(event){//上传照片转换为base64
+  		if(event.target.files.length>0){  
+        var that=this
+        console.log("点击了")
+				var reader=new FileReader();
+						reader.readAsDataURL(event.target.files[0]);
+						reader.onload=function(){
+							  that.data.image.push(this.result)
+							  console.log(that.data.image)
+						}
+	    }  
+  	}
 	}
 }
 </script>
 
 <style scoped>
+	
+	.weui-uploader__file{position: relative;border: 1px solid #ddd;overflow: auto;}
 	#searchBar{position: fixed;left: 0; right: 0; bottom: 0;}
 	.banner{display: block;}
 	.pay{vertical-align:middle; margin-left: 15px; background-color: #fca120; float:right}
@@ -75,7 +110,6 @@ export default {
     background-position: center center;
     background-size: cover;
     background-color: #f0f0f0;
-    
 		}
 		.comment .weui-media-box_appmsg{
 			-webkit-box-align: start; 
@@ -90,4 +124,6 @@ export default {
 		.comment .weui-media-box >.weui-media-box__hd{border-radius: 50%;}
 		.pay:active{background-color: #fff ;color:#f0f0f0}
 		.weui-search-bar_focusing{bottom:initial !important;top: 0;}
+		.weui-icon-cancel{position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%); }
+		.weui-media-box__desc{display: block;}
 </style>

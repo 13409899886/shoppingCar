@@ -19,7 +19,7 @@
 		            <div class="weui-cell" >
 		                <div class="weui-cell__hd"><label class="weui-label"><img src="../../../static/images/login-password.png"></label></div>
 		                <div class="weui-cell__bd">
-		                    <input class="weui-input" type="password" name="numbel" placeholder="请输入验证码" v-model.number="yzm">
+		                    <input class="weui-input" type="numbel" name="numbel" placeholder="请输入验证码" v-model.number="yzm">
 		                </div>
 		            </div>
 		       </div>
@@ -109,6 +109,14 @@ export default {
 	      	console.log(response.body)
 	      	if(response.body.error==0){
 	      		localStorage.setItem("userId",response.body.data)//登陆成功存储用户id
+	      	
+			  		this.$http.post(this.Api+'UserCenter/index',{userid:response.body.data}).then(response => {//获取用户数据
+				      	this.lodding=false
+				      	if(response.body.error==0){
+				      		localStorage.setItem("userInfo",JSON.stringify(response.body.data))//登陆成功存储用户信息
+				      	}
+					  });
+				  	
 	      		this.$router.go(-1)
 	      		
 	      	}else{

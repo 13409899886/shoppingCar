@@ -1,6 +1,7 @@
 <template>
-  <div style="padding-bottom: 80px;">
-      <div style="position: relative;">
+  <div id="box" >
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
+	  <div style="position: relative;">
 	      <div class="filtrateBox">
 		  		<div class="filtrate" :class="{on:isshow}" @click="isshow=!isshow">分类</div>
 		  		<div @click="toggle('add_time')">时间</div>
@@ -8,17 +9,15 @@
 		  		<div @click="toggle('salary')">价格</div>
 		  	</div>
 		  	<div v-show="isshow" class="weui-cells page__category-content" style="position: absolute;top:40px; margin:0;	left: 0; right: 0;z-index: 100000;">
-            <a class="weui-cell weui-cell_access js_item" v-for="item in menu" data-id="button" href="javascript:;" @click="filtrate(item)">
-                <div class="weui-cell__bd">
-                    <p>{{item.name}}</p>
-                </div>
-                <!--<div class="weui-cell__ft"><i class="weui-icon-success-no-circle"></i></div>-->
-            </a>
-            
-        </div>
+	        <a class="weui-cell weui-cell_access js_item" v-for="item in menu" data-id="button" href="javascript:;" @click="filtrate(item)">
+	            <div class="weui-cell__bd">
+	                <p>{{item.name}}</p>
+	            </div>
+	            <!--<div class="weui-cell__ft"><i class="weui-icon-success-no-circle"></i></div>-->
+	        </a>
+	    	</div>
 	    </div>
       <div v-if="indexData">
-      	
         <div class="weui-panel weui-panel_access">
             <div class="weui-panel__bd">
             	<template v-for="item in indexData">
@@ -35,7 +34,6 @@
               </template> 
             </div>
         </div>
-        
       </div>
       <i class="weui-loading" v-show="lodding" style=""></i>
   </div>
@@ -47,19 +45,21 @@ export default {
   data(){
 		return{
 			lodding:false,
-			indexData:null,
+			indexData:[],
 			isshow:false,
 			url:"",//获取列表地址
 			typeUrl:"",//获取筛选类型地址
 			text:"",
 			filType:"",
 			menu:null,
+			count:"",
+			addType:"click",
 			data:{
 				page:1,
 				type_id:null,
-				add_time:0,
-				salary:0,
-				paynum:0
+				add_time:false,
+				salary:false,
+				paynum:false
 			}
 		}
   },
@@ -67,25 +67,33 @@ export default {
   },
   methods:{
   	toggle(obj){
-  		console.log(this.data[obj])
-  		if(this.data[obj]==0){
-  			this.data[obj]=1
-  		}else{
-  			this.data[obj]=0
-  		}
-  		this.filtrate()
+				this.data[obj]=!this.data[obj]
+			if(this.data[obj]){
+				this.indexData.sort(function(a,b){ return b[obj]-a[obj]})
+			}else{
+				this.indexData.sort(function(a,b){ return a[obj]-b[obj]})
+			}
   	},
   	filtrate(item){
   		if(item){
   			this.data.type_id=item.id
   			this.isshow=!this.isshow
+  			this.addType="click"
+  			this.data.page=1
   		}
-  		console.log(this.data)
+  		console.log(this.addType)
   		//	  获取首页内容
-		  this.$http.post(this.Api+this.url,this.data).then(response => {//获取用户数据
+		  this.$http.post(this.Api+this.url,this.data).then(response => {//获取数据
 	      	if(response.body.error==0){
-	      		this.indexData=response.body.data
-	      		console.log(this.indexData)
+	      		if(this.addType=="scoll"){
+	      			for(var k in response.body.data){
+	      				this.indexData.push(response.body.data[k])
+	      			}
+	      		}else if(this.addType=="click"){
+	      			this.indexData=response.body.data
+	      		}
+	      		console.log(response.body)
+	      		this.count=response.body.count
 	      		this.lodding=false
 	      	}
 		  });
@@ -93,6 +101,26 @@ export default {
   },
 	mounted(){
 		this.lodding=true
+		var that=this
+  	//监听页面滑动
+  	setTimeout(()=>{
+			document.getElementById('box').addEventListener('scroll', function(){  
+	  		console.log("滑动了")
+	  		//下面这句主要是获取网页的总高度，主要是考虑兼容性所以把Ie支持的documentElement也写了，这个方法至少支持IE8  
+        var htmlHeight=document.getElementById('box').scrollHeight||document.getElementById('box').scrollHeight;  
+        //clientHeight是网页在浏览器中的可视高度，  
+        var clientHeight=document.body.clientHeight||document.documentElement.clientHeight;  
+        //scrollTop是浏览器滚动条的top位置，  
+        var scrollTop=document.getElementById('box').scrollTop||document.getElementById('box').scrollTop;  
+        //通过判断滚动条的top位置与可视网页之和与整个网页的高度是否相等来决定是否加载内容；
+        console.log(that.data.page<that.count)
+        if(scrollTop+clientHeight==htmlHeight&&that.data.page<that.count){  
+       		that.data.page++
+       		that.addType="scoll"
+       		that.filtrate()
+        }
+	    });
+		},500) 
 		//确定技能或者是任务
 		if(this.$route.params.type=="task"){
 			this.url="Mission/more_mission"
@@ -138,4 +166,6 @@ export default {
 	.filtrate.on:before{ border-bottom-color: transparent;border-top-color: #ffa515; position: absolute;right: 5px;top:50%; transform: translateY(0);}
 	.weui-cell_access .weui-cell__ft:after{display: none;}
 	 .weui-icon-success-no-circle{color: #ffa515;}
+	 .comeBack{background:-webkit-linear-gradient(top,#ffa515,#ff7e3d);color: #fff;padding: 0px 15px; line-height: 3; font-size: 13px;}
+	
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div style="background:#fff;height: 100%;">
+  	<div class="comeBack" @click="$router.go(-1)">返回</div>
   	<p style="line-height: 5; text-align: center; font-size: 30px;">输入新手机号码</p>
 		<form action="">
 			<div style="padding: 0 15px;">
